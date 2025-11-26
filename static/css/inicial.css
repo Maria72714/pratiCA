@@ -1,0 +1,29 @@
+.container-inicial {
+    
+    color:#16a774;
+    text-align: center;
+    padding: 100px 20px;
+    height: 400px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+}
+
+.container-inicial  h1 {
+    font-size: 3.5em; 
+    margin: 0;
+    font-weight: 900; 
+    letter-spacing: -1px; 
+    line-height: 1.1; 
+    color: #16a774; 
+    position: relative;
+    display: inline-block; 
+    padding-bottom: 20px;
+}
+
+
+.container-principal {
+    
+}
