@@ -6,8 +6,9 @@
 
 <link rel="stylesheet" href="{{ url_for('static', filename='css/cadastro_usuario.css') }}">
 
-<h2>Cadastre-se</h2>
+
 <form action="" method="post">
+    <h2>Cadastre-se</h2>
         <label for="email">E-mail</label>
         <input id="email" name="email" type="email" required placeholder="seu@exemplo.com" value="{{ request.form.email or '' }}">
 
