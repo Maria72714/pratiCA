@@ -37,21 +37,26 @@ body{
 .navbar h2 a{
     font-family: 'Poppins', sans-serif;
     font-size: 24px;
-    color: black;
+    color: white;
     text-decoration: none;
 }
 .navbar ul li a {
     text-decoration: none;
     font-size: 18px;
-    color: black;
+    color: white;
 }
 .main{
     min-height: calc(100vh - 160px);
+    background-color: #F8FFF8;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .footer{
     height: 60px;
     background-color: #16a774;
+    color: white;
     display: flex;
     font-family: 'Poppins', sans-serif;
     justify-content: center;

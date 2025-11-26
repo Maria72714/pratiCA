@@ -10,15 +10,16 @@
     <div class="conteiner">
     <div class="navbar">
         <div class="nav">
-        <h2><a href="{{ url_for('index' ) }}" class="logo">📚 prátiCA</a></h2>
+        <h2><a href="{{ url_for('auth.index' ) }}" class="logo">📚 prátiCA</a></h2>
         <ul>
-           <li><a href="{{url_for('cadastro_usuario')}}">Cadastro</a></li>
-           <li><a href="{{url_for('login')}}">Login</a></li>
+           <li><a href="{{url_for('usuario.cadastro_usuario')}}">Cadastro</a></li>
+           <li><a href="{{url_for('auth.login')}}">Login</a></li>
         </ul>   
         </div>
     </div>
     <div class="main">
     <div class="conteudo">
+        {% include 'partials/erros.html' %}
         {% block conteudo %}
         {% endblock %}
     
