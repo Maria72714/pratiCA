@@ -13,7 +13,7 @@ app.register_blueprint(usuarios_bp)
 app.register_blueprint(auth_bp)
 
 login_manager = LoginManager(app)
-login_manager.login_view = 'login'
+login_manager.login_view = 'auth.login'
 
 
 @login_manager.user_loader
