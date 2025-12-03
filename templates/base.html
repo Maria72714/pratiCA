@@ -20,6 +20,8 @@
                 <li><a href="{{url_for('auth.login')}}">Login</a></li>
                 <li><a class = "logout-teste" href="{{ url_for('auth.logout' ) }}">Logout</a></li>
             {% endif %}
+                <li><a href="{{ url_for('horario.cadastrar_horario' ) }}">Cadastrar Horário</a></li>
+                <li><a href="{{ url_for('horario.listar_horarios' ) }}">Horários</a></li>
             
         </ul>   
         </div>

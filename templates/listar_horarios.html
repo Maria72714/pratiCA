@@ -1,0 +1,28 @@
+{% extends "base.html" %} 
+
+{%block title%} pratiCA {%endblock%}
+
+{%block conteudo%}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/listar_horarios.css') }}">
+
+<div class="horarios-cadastrados">
+    <h1>Horários Cadastrados</h1>
+    
+    <table>
+        <tr>
+            <th></th>
+        </tr>
+        {% for horario in horarios %}
+        <tr>
+            <td>{{ horario.dia_semana }}: {{ horario.hora_inicio }} - {{ horario.hora_fim }}</td>
+        </tr>
+        {% else %}
+        <tr>
+            <td>Nenhum horário cadastrado.</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+{%endblock%}

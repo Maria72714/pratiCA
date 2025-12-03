@@ -55,3 +55,6 @@ def cadastro_usuario():
 @login_required
 def dashboard():
     return render_template('dashboard.html', nome=current_user.nome)
+
+
+
