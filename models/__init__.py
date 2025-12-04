@@ -37,6 +37,8 @@ class Usuarios(Base, UserMixin):
     curso:Mapped['Cursos'] = relationship(back_populates='usuarios')
 
     horarios:Mapped[list['Horarios']] = relationship(secondary=usuario_horario, back_populates='usuarios')
+    
+    horarios_professor: Mapped[list['Horarios']] = relationship("Horarios", foreign_keys="Horarios.id_professor")
 
     def get_id(self):
         return str(self.id_usuario)
@@ -51,7 +53,7 @@ class Horarios(Base):
     horario_termino:Mapped[time] = mapped_column(Time, nullable=False)
     sala:Mapped[str] = mapped_column(String(50), nullable=False)
 
-    
+    professor: Mapped['Usuarios'] = relationship("Usuarios", foreign_keys=[id_professor])
     usuarios:Mapped[list['Usuarios']] = relationship(secondary=usuario_horario, back_populates='horarios')
     
 class Cursos(Base):

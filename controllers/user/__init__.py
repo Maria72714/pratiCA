@@ -25,7 +25,7 @@ def cadastro_usuario():
         with Session(bind=engine) as session:
             usuario_existente = session.query(Usuarios).filter_by(matricula=matricula).first()
             if usuario_existente:
-                flash("E-mail já cadastrado! Escolha outro.", "error")
+                flash("Matricula já cadastrada!", "error")
                 return redirect(url_for('usuario.cadastro_usuario'))
 
             # Criptografa a senha

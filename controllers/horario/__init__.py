@@ -1,5 +1,5 @@
 from flask import Blueprint, request, flash, render_template, redirect, url_for
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from models import Horarios, Usuarios, engine
 from flask_login import current_user
 
@@ -36,6 +36,5 @@ def cadastrar_horario():
 @horarios_bp.route('/listar_horarios')
 def listar_horarios():
     with Session(bind=engine) as session:
-        horarios = session.query(Horarios, Usuarios).join(Usuarios).all()
+        horarios = (session.query(Horarios).options(joinedload(Horarios.professor)).all())
     return render_template("listar_horarios.html", horarios=horarios)
-
