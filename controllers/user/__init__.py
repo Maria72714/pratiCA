@@ -1,8 +1,10 @@
 from flask import render_template, Blueprint, request,redirect, flash, url_for
-from models import engine, Usuarios, Cursos
+from models import engine, Usuarios, Cursos, Horarios
 from sqlalchemy.orm import Session
+from sqlalchemy import func
 from werkzeug.security import generate_password_hash
 from flask_login import login_required,current_user
+from datetime import date
 
 
 usuarios_bp = Blueprint('usuario',__name__, static_folder="static", template_folder="templates")
@@ -54,7 +56,11 @@ def cadastro_usuario():
 @usuarios_bp.route('/dashboard')
 @login_required
 def dashboard():
-    return render_template('dashboard.html', nome=current_user.nome)
+    with Session(bind=engine) as session:
+        today = date.today().strftime("%Y-%m-%d")
+        horarios_total = session.query(func.count(Horarios.id_professor)).filter_by(id_professor=current_user.id_usuario).scalar()
+        horarios_hoje = session.query(func.count(Horarios.id_professor)).filter_by(id_professor=current_user.id_usuario, dias=today).scalar()
+    return render_template('dashboard.html', nome=current_user.nome, hoje=horarios_hoje, total=horarios_total)
 
 
 

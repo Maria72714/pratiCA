@@ -14,12 +14,17 @@
             <th>Dia</th>
             <th>Inicio</th>
             <th>Término</th>
+            <th>Sala</th>
+            <th>Professor Responsável</th>
         </tr>
         {% for horario in horarios %}
         <tr>
             <td>{{ horario.dias }}</td>
             <td>{{ horario.horario_inicio }}</td>
             <td>{{ horario.horario_termino }}</td>
+            <td>{{ horario.sala }}</td>
+            <td>{{ horario.nome}}</td>
+            
         </tr>
         {% else %}
         <tr>

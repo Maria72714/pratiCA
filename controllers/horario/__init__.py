@@ -36,6 +36,6 @@ def cadastrar_horario():
 @horarios_bp.route('/listar_horarios')
 def listar_horarios():
     with Session(bind=engine) as session:
-        horarios = session.query(Horarios).all()
+        horarios = session.query(Horarios, Usuarios).join(Usuarios).all()
     return render_template("listar_horarios.html", horarios=horarios)
 

@@ -49,5 +49,40 @@
     height: 600px;
     gap: 30px;
     justify-content: center;
+    align-items: center;
+    
 }
 
+.rotas > div {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 300px;
+    width: 300px;
+    border-radius: 15px;
+    margin-bottom: 50px;
+    background-color: #16a774;
+    transition: all 100ms;
+}
+
+.rotas > div:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.rotas > div > h3 {
+    margin-top: 20px;
+    color: #065082;
+    font-size: 23px;
+    font-weight: bold;
+}
+
+.rotas > div > p {
+    
+    width: 95%;
+    margin-top: 10px;
+    color: white;
+    text-align: justify;
+    margin-left: 5px;
+}
