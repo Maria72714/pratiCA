@@ -12,36 +12,41 @@ usuarios_bp = Blueprint('usuario',__name__, static_folder="static", template_fol
 
 @usuarios_bp.route('/cadastro_usuario', methods = ['POST', 'GET'])
 def cadastro_usuario():
-    if request.method == 'POST':
-        matricula = int(request.form['matricula'])
-        nome = request.form['nome']
-        senha = request.form['senha']
-        categoria = request.form['categoria']
+    # if request.method == 'POST':
+    #     matricula = int(request.form['matricula'])
+    #     nome = request.form['nome']
+    #     senha = request.form['senha']
+    #     categoria = request.form['categoria']
 
-        # Verifica se o email já existe
-        with Session(bind=engine) as session:
-            usuario_existente = session.query(Usuarios).filter_by(matricula=matricula).first()
-            if usuario_existente:
-                flash("Matricula já cadastrada!", "error")
-                return redirect(url_for('usuario.cadastro_usuario'))
+    #     # Verifica se o email já existe
+    #     with Session(bind=engine) as session:
+    #         usuario_existente = session.query(Usuarios).filter_by(matricula=matricula).first()
+    #         if usuario_existente:
+    #             flash("Matricula já cadastrada!", "error")
+    #             return redirect(url_for('usuario.cadastro_usuario'))
 
           
-            senha_hash = generate_password_hash(senha)
+    #         senha_hash = generate_password_hash(senha)
 
             
-            usuario = Usuarios(
-                matricula=matricula,
-                nome=nome,
-                senha=senha_hash,
-                categoria=categoria
-            )
+    #         usuario = Usuarios(
+    #             matricula=matricula,
+    #             nome=nome,
+    #             senha=senha_hash,
+    #             categoria=categoria
+    #         )
 
-            session.add(usuario)
-            session.commit()
+    #         session.add(usuario)
+    #         session.commit()
 
-            flash("Usuário cadastrado com sucesso! Faça login.", "sucesso")
-            return redirect(url_for('auth.login'))
-
+    #         flash("Usuário cadastrado com sucesso! Faça login.", "sucesso")
+            # return redirect(url_for('auth.login'))
+    categoria = request.args.get('categoria')
+    print(categoria)
+    if categoria == 'aluno':
+        return redirect(url_for('usuario.cadastro_aluno'))
+    elif categoria == 'professor':
+        return redirect(url_for('usuario.cadastro_professor'))
     return render_template('cadastro_usuario.html')
 
 @usuarios_bp.route('/cadastro_aluno', methods = ['POST', 'GET'])
@@ -88,10 +93,12 @@ def cadastro_aluno():
 
 
 @usuarios_bp.route('/cadastro_professor', methods = ['POST', 'GET'])
-def cadastro_professor():   
-   
+def cadastro_professor():
+    
 
-    return render_template('cadastro_professor.html')
+    with Session(bind = engine) as sessao:
+        cursos = sessao.query(Cursos).all()
+    return render_template('cadastro_professor.html', cursos = cursos)
 @usuarios_bp.route('/dashboard')
 @login_required
 def dashboard():
