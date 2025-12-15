@@ -13,9 +13,11 @@
       text-decoration: none;
 }
 
-.botoes [class^="botao"]    {
+.botoes [class^="botao"]  {
     height: 50px;
-    width: 80px;
+    text-align: center;
+    border-radius: 15px;
+    width: 120px;
     background-color: aquamarine;
 }
 
