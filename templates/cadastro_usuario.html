@@ -13,13 +13,13 @@
 </div>
 <div class="botoes">
     <div class="botao_aluno">
-        <a href="{{ url_for('usuario.cadastro_usuario') }}">
-           Aluno
+        <a href="{{ url_for("usuario.cadastro_usuario", categoria="aluno") }}">
+            Aluno
         </a>
     </div>
     <div class="botao_professor">
-        <a href="{{ url_for('usuario.cadastro_professor') }}">
-        Professor
+        <a href="{{ url_for("usuario.cadastro_usuario", categoria="professor") }}">
+            Professor
         </a>
 </div>
 </div>
