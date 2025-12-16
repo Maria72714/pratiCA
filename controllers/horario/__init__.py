@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session, joinedload
 from sqlalchemy import text
 from models import Horarios, Usuarios, engine
 from flask_login import current_user
+from datetime import date
 
 horarios_bp = Blueprint('horario',__name__, template_folder = 'templates', static_folder = 'static')
 
@@ -32,7 +33,7 @@ def cadastrar_horario():
                 flash("Horário cadastrado com sucesso!", "success")
     
                 return redirect(url_for('horario.listar_horarios'))
-    return render_template("cadastro_horario.html")
+    return render_template("cadastro_horario.html", today=date.today().isoformat())
 
 @horarios_bp.route('/listar_horarios')
 def listar_horarios():
@@ -44,8 +45,9 @@ def listar_horarios():
 @horarios_bp.route('/listar_participar')
 def listar_participar():
     with Session(bind=engine) as session:
-        horarios = (session.query(Horarios).options(joinedload(Horarios.usuarios),joinedload(Horarios.professor) ).all())
-    return render_template('horarios_participando.html', horarios = horarios)
+        horarios = (session.query(Horarios).join(Horarios.usuarios).filter(Usuarios.id_usuario == current_user.id_usuario).options(joinedload(Horarios.professor)).all())
+    return render_template('horarios_participando.html', horarios=horarios)
+
 
 
 @horarios_bp.route('/participar_ca' ,methods = ['POST','GET'])

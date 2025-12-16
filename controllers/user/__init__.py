@@ -58,7 +58,7 @@ def cadastro_aluno():
         curso = int(request.form['curso'])
         ano = request.form['ano']
         turno = request.form['turno']
-        categoria = request.form['categoria']
+        
 
         # Verifica se o email já existe
         with Session(bind=engine) as session:
@@ -77,7 +77,7 @@ def cadastro_aluno():
                 senha=senha_hash,
                 ano=ano,
                 turno=turno,
-                categoria=categoria,
+                categoria='aluno',
                 id_curso=curso
             )
 
@@ -92,21 +92,39 @@ def cadastro_aluno():
     return render_template('cadastro_aluno.html', cursos=cursos)
 
 
-@usuarios_bp.route('/cadastro_professor', methods = ['POST', 'GET'])
+@usuarios_bp.route('/cadastro_professor', methods=['GET', 'POST'])
 def cadastro_professor():
-    
+    if request.method == 'POST':
+        matricula = int(request.form['matricula'])
+        nome = request.form['nome']
+        senha = request.form['senha']
+        with Session(bind=engine) as session:
+            existe = session.query(Usuarios).filter_by(matricula=matricula).first()
+            if existe:
+                flash('Matrícula já cadastrada', 'error')
+                return redirect(url_for('usuario.cadastro_professor'))
+            senha_hash = generate_password_hash(senha)
+            professor = Usuarios(matricula=matricula,nome=nome,senha=senha_hash,categoria='professor')
+            session.add(professor)
+            session.commit()
+            flash('Professor cadastrado com sucesso', 'success')
+            return redirect(url_for('auth.login'))
+    with Session(bind=engine) as session:
+        cursos = session.query(Cursos).all()
+    return render_template('cadastro_professor.html')
 
-    with Session(bind = engine) as sessao:
-        cursos = sessao.query(Cursos).all()
-    return render_template('cadastro_professor.html', cursos = cursos)
 @usuarios_bp.route('/dashboard')
 @login_required
 def dashboard():
+    today = date.today().strftime("%Y-%m-%d")
     with Session(bind=engine) as session:
-        today = date.today().strftime("%Y-%m-%d")
-        horarios_total = session.query(func.count(Horarios.id_professor)).filter_by(id_professor=current_user.id_usuario).scalar()
-        horarios_hoje = session.query(func.count(Horarios.id_professor)).filter_by(id_professor=current_user.id_usuario, dias=today).scalar()
-    return render_template('dashboard.html', nome=current_user.nome, hoje=horarios_hoje, total=horarios_total)
+        if current_user.categoria == 'professor':
+            total = (session.query(func.count(Horarios.id_horario)).filter(Horarios.id_professor == current_user.id_usuario).scalar())
+            hoje = (session.query(func.count(Horarios.id_horario)).filter(Horarios.id_professor == current_user.id_usuario,Horarios.dias == today).scalar())
+        else:  # aluno
+            total = (session.query(func.count(Horarios.id_horario)).join(Horarios.usuarios).filter(Usuarios.id_usuario == current_user.id_usuario).scalar())
+            hoje = (session.query(func.count(Horarios.id_horario)).join(Horarios.usuarios).filter(Usuarios.id_usuario == current_user.id_usuario,Horarios.dias == today).scalar())
+    return render_template('dashboard.html',nome=current_user.nome,hoje=hoje,total=total)
 
 
 

@@ -1,4 +1,5 @@
 from flask import Flask
+from flask import render_template
 from sqlalchemy.orm import Session
 from models import engine, Usuarios
 from flask_login import LoginManager
@@ -21,3 +22,10 @@ def load_user(user_id):
     with Session(bind=engine) as session:
         return session.get(Usuarios, int(user_id))
 
+@app.errorhandler(404)
+def erro_404(teste):
+    return render_template("erro_base.html", erro = 404, mensagem = "Página não encontrada.")
+
+@app.errorhandler(500)
+def erro_500(teste):
+    return render_template("erro_base.html", erro = 500, mensagem = "Erro interno do servidor.")

@@ -16,8 +16,7 @@
                 <li><a href="{{url_for('usuario.cadastro_usuario')}}">Cadastro</a></li> 
                 <li><a href="{{url_for('auth.login')}}">Login</a></li>
             {% else %}
-                <li><a href="{{url_for('usuario.cadastro_usuario')}}">Cadastro</a></li> 
-                <li><a href="{{url_for('auth.login')}}">Login</a></li>
+                <li><a href="{{url_for('usuario.dashboard')}}">Dashboard</a></li> 
                 <li><a class = "logout-teste" href="{{ url_for('auth.logout' ) }}">Logout</a></li>
                 {% if current_user.categoria == "professor" %}
                     <li><a href="{{ url_for('horario.cadastrar_horario') }}">Cadastrar Horário</a></li>

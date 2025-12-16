@@ -8,20 +8,18 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/cadastro_usuario.css') }}">
 
 <div class="cadastro">
-<div class="title">
-<h1>Seu cargo na instituição</h1>
-</div>
-<div class="botoes">
-    <div class="botao_aluno">
-        <a href="{{ url_for("usuario.cadastro_usuario", categoria="aluno") }}">
-            Aluno
-        </a>
-    </div>
-    <div class="botao_professor">
-        <a href="{{ url_for("usuario.cadastro_usuario", categoria="professor") }}">
-            Professor
-        </a>
-</div>
-</div>
+  <div class="title">
+    <h1>Seu cargo na instituição</h1>
+  </div>
+
+  <div class="botoes">
+    <a href="{{ url_for('usuario.cadastro_usuario', categoria='aluno') }}" class="botao_aluno">
+      <div>Aluno</div>
+    </a>
+
+    <a href="{{ url_for('usuario.cadastro_usuario', categoria='professor') }}" class="botao_professor">
+      <div>Professor</div>
+    </a>
+  </div>
 </div>
 {%endblock%}
