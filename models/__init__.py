@@ -69,11 +69,18 @@ class Aluno(Usuarios):
 
     ano: Mapped[str] = mapped_column(String(20), nullable=False)
     turno: Mapped[str] = mapped_column(String(20), nullable=False)
-    curso: Mapped[int] = mapped_column(Integer, nullable=False)
 
-    # curso: Mapped['Cursos'] = relationship(back_populates='alunos')
+    curso_id: Mapped[int] = mapped_column(
+        ForeignKey('cursos.id'),
+        nullable=False
+    )
+
+    curso: Mapped['Cursos'] = relationship(
+        back_populates='alunos'
+    )
 
     horarios: Mapped[list['Horarios']] = relationship(
+        'Horarios',
         secondary=aluno_horario,
         back_populates='alunos'
     )
@@ -87,6 +94,7 @@ class Horarios(Base):
     __tablename__ = 'horarios'
 
     id_horario: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+
     id_professor: Mapped[int] = mapped_column(
         ForeignKey('professores.id_usuario'),
         nullable=False
@@ -103,17 +111,16 @@ class Horarios(Base):
     )
 
     alunos: Mapped[list['Aluno']] = relationship(
+        'Aluno',
         secondary=aluno_horario,
         back_populates='horarios'
     )
-
-
-# class Cursos(Base):
-#     __tablename__ = 'cursos'
-
-#     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-#     nome: Mapped[str] = mapped_column(String(50), nullable=False)
-
-#     alunos: Mapped[list['Aluno']] = relationship(back_populates='curso')
+    
+    
+class Cursos(Base):     
+    __tablename__ = 'cursos'
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    nome: Mapped[str] = mapped_column(String(50), nullable=False)
+    alunos: Mapped[list['Aluno']] = relationship(back_populates='curso',cascade='all, delete-orphan')
 
 Base.metadata.create_all(bind=engine)

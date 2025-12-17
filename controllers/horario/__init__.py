@@ -1,5 +1,5 @@
 from flask import Blueprint, request, flash, render_template, redirect, url_for
-from sqlalchemy.orm import Session, joinedload
+from sqlalchemy.orm import Session, joinedload,selectinload
 from sqlalchemy import text, select
 from models import Horarios, Usuarios, engine, aluno_horario
 from flask_login import current_user
@@ -45,7 +45,7 @@ def listar_horarios():
         
         horarios_inscritos_ids = []
         if current_user.is_authenticated and current_user.categoria == 'aluno':
-            stmt = select(aluno_horario.c.id_horario).where(aluno_horario.c.id_usuario == current_user.id_usuario)
+            stmt = select(aluno_horario.c.id_horario).where(aluno_horario.c.id_aluno == int(current_user.get_id()))
             result = session.execute(stmt).scalars().all()
             horarios_inscritos_ids = list(result)
             
@@ -55,7 +55,12 @@ def listar_horarios():
 @horarios_bp.route('/listar_participar')
 def listar_participar():
     with Session(bind=engine) as session:
-        horarios = (session.query(Horarios).join(Horarios.alunos).filter(Usuarios.id_usuario == current_user.id_usuario).options(joinedload(Horarios.alunos)).all())
+        horarios = (
+        session.query(Horarios)
+        .options(
+            selectinload(Horarios.professor),
+            selectinload(Horarios.alunos)
+        )).all()
     return render_template('horarios_participando.html', horarios=horarios)
 
 
@@ -67,11 +72,11 @@ def participar_ca():
 
     with Session(bind= engine) as sessao:
         horario = sessao.query(Horarios).filter_by(id_horario = horario_id).first()
-        if current_user in horario.usuarios:
+        if current_user in horario.alunos:
             flash('você ja esta cadastrado nesse CA', 'error')
             return redirect(url_for('horario.listar_horarios'))
         
-        horario.usuarios.append(current_user)
+        horario.alunos.append(current_user)
         sessao.commit()
         sessao.close()
     return redirect(url_for('horario.listar_participar'))
