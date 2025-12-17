@@ -1,5 +1,5 @@
 from flask import render_template, Blueprint, request,redirect, flash, url_for
-from models import engine, Usuarios, Horarios, Aluno, Professor
+from models import engine, Usuarios, Horarios, Aluno, Professor, Cursos
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 from werkzeug.security import generate_password_hash
@@ -78,7 +78,7 @@ def cadastro_aluno():
                 categoria='aluno',
                 ano=ano,
                 turno=turno,
-                curso=curso
+                curso_id=curso
             )
 
             session.add(usuario)
@@ -122,8 +122,8 @@ def dashboard():
             total = (session.query(func.count(Horarios.id_horario)).filter(Horarios.id_professor == current_user.id_usuario).scalar())
             hoje = (session.query(func.count(Horarios.id_horario)).filter(Horarios.id_professor == current_user.id_usuario,Horarios.dias == today).scalar())
         else:  # aluno
-            total = (session.query(func.count(Horarios.id_horario)).join(Horarios.usuarios).filter(Usuarios.id_usuario == current_user.id_usuario).scalar())
-            hoje = (session.query(func.count(Horarios.id_horario)).join(Horarios.usuarios).filter(Usuarios.id_usuario == current_user.id_usuario,Horarios.dias == today).scalar())
+            total = (session.query(func.count(Horarios.id_horario)).join(Horarios.alunos).filter(Usuarios.id_usuario == current_user.id_usuario).scalar())
+            hoje = (session.query(func.count(Horarios.id_horario)).join(Horarios.alunos).filter(Usuarios.id_usuario == current_user.id_usuario,Horarios.dias == today).scalar())
     return render_template('dashboard.html',nome=current_user.nome,hoje=hoje,total=total)
 
 
