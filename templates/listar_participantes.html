@@ -16,7 +16,7 @@
         <p><strong>Sala:</strong> {{ horario.sala }}</p>
     </div>
 
-   <div class="lista_presenca"> <h2>Lista de presença ({{ horario.usuarios|length }})</h2></div>
+   <div class="lista_presenca"> <h2>Lista de presença ({{ horario.alunos|length }})</h2></div>
 
     <div class="lista-participantes">
         <table>
@@ -26,11 +26,11 @@
                 <th>Curso</th>
                 <th>Turno</th>
             </tr>
-            {% for aluno in horario.usuarios %}
+            {% for aluno in horario.alunos %}
             <tr>
                 <td>{{ aluno.matricula }}</td>
                 <td>{{ aluno.nome }}</td>
-                <td>{{ aluno.curso.nome}}</td>
+                <td>{{ aluno.curso}}</td>
                 <td>{{ aluno.turno }}</td>
             </tr>
             {% else %}

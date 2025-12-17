@@ -20,7 +20,11 @@
             </div>
             <div>
                 <h4>Próximo</h4>
-                
+                {% if proximo %}
+                    <h5>{{ proximo.dias }} - {{ proximo.horario_inicio }}</h5>
+                {% else %}
+                    <h5>—</h5>
+                {% endif %}
             </div>
         </div>
 

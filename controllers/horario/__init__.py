@@ -118,7 +118,7 @@ def excluir_ca():
 def listar_participantes(horario_id):
     with Session(bind=engine) as session:
         horario = session.query(Horarios).options(
-            joinedload(Horarios.alunos).joinedload(Usuarios.id_usuario)
+            selectinload(Horarios.alunos)
         ).filter_by(id_horario=horario_id).first()
         
         if not horario:

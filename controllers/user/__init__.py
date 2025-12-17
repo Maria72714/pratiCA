@@ -104,7 +104,7 @@ def cadastro_professor():
                 flash('Matrícula já cadastrada', 'error')
                 return redirect(url_for('usuario.cadastro_professor'))
             senha_hash = generate_password_hash(senha)
-            professor = Usuarios(matricula=matricula,nome=nome,senha=senha_hash,categoria='professor')
+            professor = Professor(matricula=matricula, nome=nome, senha=senha_hash, categoria='professor')
             session.add(professor)
             session.commit()
             flash('Professor cadastrado com sucesso', 'success')
@@ -121,10 +121,19 @@ def dashboard():
         if current_user.categoria == 'professor':
             total = (session.query(func.count(Horarios.id_horario)).filter(Horarios.id_professor == current_user.id_usuario).scalar())
             hoje = (session.query(func.count(Horarios.id_horario)).filter(Horarios.id_professor == current_user.id_usuario,Horarios.dias == today).scalar())
+            proximo = (session.query(Horarios)
+                       .filter(Horarios.id_professor == current_user.id_usuario, Horarios.dias >= today)
+                       .order_by(Horarios.dias.asc(), Horarios.horario_inicio.asc())
+                       .first())
         else:  # aluno
             total = (session.query(func.count(Horarios.id_horario)).join(Horarios.alunos).filter(Usuarios.id_usuario == current_user.id_usuario).scalar())
             hoje = (session.query(func.count(Horarios.id_horario)).join(Horarios.alunos).filter(Usuarios.id_usuario == current_user.id_usuario,Horarios.dias == today).scalar())
-    return render_template('dashboard.html',nome=current_user.nome,hoje=hoje,total=total)
+            proximo = (session.query(Horarios)
+                       .join(Horarios.alunos)
+                       .filter(Usuarios.id_usuario == current_user.id_usuario, Horarios.dias >= today)
+                       .order_by(Horarios.dias.asc(), Horarios.horario_inicio.asc())
+                       .first())
+    return render_template('dashboard.html', nome=current_user.nome, hoje=hoje, total=total, proximo=proximo)
 
 
 
